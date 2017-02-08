@@ -13,7 +13,12 @@ import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebFilter;
 
 import conexao.SingletonConnetion;
-
+/**
+ * Responsável por intercetar as requisições e iniciar 
+ * a conexão com o banco de dados quando o servidor estiver subindo
+ * @author alex
+ *
+ */
 @WebFilter(filterName = "conexaoFilter")
 public class FilterConnection implements Filter {
 

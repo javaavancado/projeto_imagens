@@ -10,6 +10,12 @@ import java.util.List;
 import conexao.SingletonConnetion;
 import entidade.Imagens;
 
+/**
+ * Classe Responsável pelas operações no banco de dados
+ * 
+ * @author alex
+ * 
+ */
 public class DaoImagens {
 
 	private Connection connection;
@@ -22,7 +28,7 @@ public class DaoImagens {
 	public void salvarOuAtualizar(Imagens imagen) throws Exception {
 		try {
 			if (imagen.getId() == null || imagen.getId() <= 0) {// insere
-				String sql = "INSERT INTO projeto_imagens(produto, fornecedor, miniatura, urlimagem, urlminiimg)VALUES ( ?, ?, ?, ?, ?);";
+				String sql = "INSERT INTO imagens(produto, fornecedor, miniatura, urlimagem, urlminiimg)VALUES ( ?, ?, ?, ?, ?);";
 				PreparedStatement insert = connection.prepareStatement(sql);
 				constroiStatement(imagen, insert);
 				insert.execute();
@@ -37,7 +43,7 @@ public class DaoImagens {
 	}
 
 	private void atualiza(Imagens imagem) throws Exception {
-		String sql = "UPDATE projeto_imagens SET produto=?, fornecedor=?, miniatura=?, urlimagem=?, urlminiimg=?  where id = "
+		String sql = "UPDATE imagens SET produto=?, fornecedor=?, miniatura=?, urlimagem=?, urlminiimg=?  where id = "
 				+ imagem.getId();
 		PreparedStatement update = connection.prepareStatement(sql);
 
@@ -47,30 +53,32 @@ public class DaoImagens {
 	}
 
 	public void deleta(String codImg) throws Exception {
-		String sql = "DELETE FROM projeto_imagens where id = " + codImg;
-		try {
-
-			PreparedStatement delete = connection.prepareStatement(sql);
-			delete.execute();
-			connection.commit();
-		} catch (SQLException e) {
+		if (!codImg.isEmpty() && codImg != null) {
+			String sql = "DELETE FROM imagens where id = " + codImg;
 			try {
-				connection.rollback();
-			} catch (SQLException e1) {
-				e1.printStackTrace();
+
+				PreparedStatement delete = connection.prepareStatement(sql);
+				delete.execute();
+				connection.commit();
+			} catch (SQLException e) {
+				try {
+					connection.rollback();
+				} catch (SQLException e1) {
+					e1.printStackTrace();
+				}
+				throw new RuntimeException(e);
 			}
-			throw new RuntimeException(e);
 		}
 	}
 
 	public Imagens consulta(Integer cod) {
 		Imagens retorno = new Imagens();
 		try {
-			String sql = "select * FROM projeto_imagens where id = " + cod;
+			String sql = "select * FROM imagens where id = " + cod;
 			PreparedStatement find = connection.prepareStatement(sql);
 			ResultSet resultSet = find.executeQuery();
 			while (resultSet.next()) {
-				retorno.setId(resultSet.getLong("id"));
+				retorno.setId(resultSet.getInt("id"));
 				retorno.setProduto(resultSet.getString("produto"));
 				retorno.setFornecedor(resultSet.getString("fornecedor"));
 				retorno.setMiniatura(resultSet.getString("miniatura"));
@@ -86,19 +94,18 @@ public class DaoImagens {
 	public List<Imagens> consultaTodos() {
 
 		List<Imagens> retornoList = new ArrayList<Imagens>();
-		String sql = "select * FROM cliente_pessoa_fisica order by id;";
+		String sql = "select id,produto,fornecedor, miniatura FROM imagens order by id;";
 
 		try {
 			PreparedStatement find = connection.prepareStatement(sql);
 			ResultSet resultSet = find.executeQuery();
 			while (resultSet.next()) {
 				Imagens retorno = new Imagens();
-				retorno.setId(resultSet.getLong("id"));
+				retorno.setId(resultSet.getInt("id"));
 				retorno.setProduto(resultSet.getString("produto"));
 				retorno.setFornecedor(resultSet.getString("fornecedor"));
 				retorno.setMiniatura(resultSet.getString("miniatura"));
-				retorno.setUrlimagem(resultSet.getString("urlimagem"));
-				retorno.setUrlminiimg(resultSet.getString("urlminiimg"));
+//				retorno.setUrlminiimg(resultSet.getString("urlminiimg"));
 
 				retornoList.add(retorno);
 			}

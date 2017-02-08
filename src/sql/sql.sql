@@ -6,7 +6,7 @@ CREATE TABLE `projeto_imagens`.`imagens` (
   `produto` VARCHAR(500) NULL,
   `fornecedor` VARCHAR(500) NULL,
   `miniatura` VARCHAR(200) NULL,
-  `urlimagem`  VARCHAR(200) NULL,
-  `urlminiimg` VARCHAR(200) NULL,
+  `urlimagem`  longtext ,
+  `urlminiimg` longtext ,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB;  

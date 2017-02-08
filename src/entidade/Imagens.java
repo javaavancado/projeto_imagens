@@ -1,19 +1,24 @@
 package entidade;
 
+/**
+ * Classe Responsável por representar o modelo de dados do banco de dados
+ * @author alex
+ *
+ */
 public class Imagens {
 
-	private Long id;
+	private Integer id;
 	private String produto;
 	private String fornecedor;
 	private String miniatura;
 	private String urlimagem;
 	private String urlminiimg;
 
-	public Long getId() {
+	public Integer getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 

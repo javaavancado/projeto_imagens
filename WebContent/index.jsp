@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -7,67 +8,132 @@
 <title>Insert title here</title>
 </head>
 <body>
-  <form action="">
-	<div style="width: 100%">
+	<form action="controllerImagem" id="formImagem"
+		enctype="application/x-www-form-urlencoded" method="post">
 
-		<div style="float: left; width: 45%">
-			<table>
-				<tr>
-					<td>Código</td>
-				</tr>
-				<tr >
-					<td><input type="text" style="width: 80px;"></td>
-				</tr>
-				
-				<tr>
-					<td>Produto</td>
-				</tr>
-				<tr>
-					<td><input type="text" style="width: 200px;"></td>
-				</tr>
-				
-				<tr>
-					<td>Fornecedor</td>
-				</tr>
-				<tr>
-					<td>
-						<select style="width: 200px;">
-						  <option value="">Defina o fornecedor</option>
-						  <option value="forn1">Fonecedor A</option>
-						  <option value="fora2">Fornecedor B</option>
-						</select>
-					</td>
-				</tr>
-				<tr>
-					<td>Miniatura</td>
-				</tr>
-				<tr>
-					<td>
-						<select style="width: 200px;">
-						  <option value="">Defina o tamanho da miniatura</option>
-						  <option value="200x300">200 x 300</option>
-						  <option value="300x420">300 x 420</option>
-						</select>
-					</td>
-				</tr>
-			</table>
-			<br/>
-			<br/>
-			<br/>
-			<br/>
-			<br/>
-			 <input type="submit" value="Salvar">
+		<input type="hidden" name="urlimagemBase64" id="urlimagemBase64"
+			value="${imagem.urlimagem}" /> <input type="hidden"
+			name="urlminiimgBase64" id="urlminiimgBase64"
+			value="${imagem.urlminiimg}" />
+
+		<div style="width: 100%">
+
+			<div style="float: left; width: 45%">
+				<table>
+					<tr>
+						<td>Código</td>
+					</tr>
+					<tr>
+						<td>
+						<input readonly="readonly" type="text" style="width: 80px;" id="id" name="id"
+							value="<c:out value="${imagem.id}" />"></td>
+					</tr>
+
+					<tr>
+						<td>Produto</td>
+					</tr>
+					<tr>
+						<td>
+						<input type="text" style="width: 200px;" id="produto"
+							name="produto" value="<c:out value="${imagem.produto}" />"></td>
+					</tr>
+
+					<tr>
+						<td>Fornecedor</td>
+					</tr>
+					<tr>
+						<td>
+						<select style="width: 200px;" id="fornecedor" name="fornecedor">
+								<option value="">Defina o fornecedor</option>
+								<option value="forn1">Fonecedor A</option>
+								<option value="fora2">Fornecedor B</option>
+						</select></td>
+					</tr>
+					<tr>
+						<td>Miniatura</td>
+					</tr>
+					<tr>
+						<td><select style="width: 200px;" id="tamanhomini" name="tamanhomini">
+								<option value="">Defina o tamanho da miniatura</option>
+								<option value="200x300">200 x 300</option>
+								<option value="300x420">300 x 420</option>
+						</select></td>
+					</tr>
+				</table>
+				<br /> <br /> <br /> <br /> <br /> 
+				    <input type="submit" onclick="document.getElementById('formImagem').action = 'controllerImagem?acao=salvar'"
+					value="Salvar"> 
+					<input type="submit"  onclick="document.getElementById('formImagem').action = 'controllerImagem?acao=deletar&id=${imagem.id}'"
+					value="Excluir">
+			</div>
+
+			<div style="float: right; width: 45%;">
+				<img src="<c:out value="${imagem.urlimagem}"/>" width="50%"
+					style="min-height: 250px;" border="0" id="target" name="target"> 
+					<br />
+					<input type="button" value="Excluir imagem" onclick="deletaFoto();">
+					 <input 
+					onchange="visualizarImg();" type="file" value="Selecionar a imagem">
+			</div>
 		</div>
 
-		<div style="float: right; width: 45%;">
-		
-		 <img src="" width="50%" style="min-height: 250px;" border="0">
-		 <br/>
-		 <input type="button" value="Selecionar a imagem">
-		 <input type="button" value="Excluir imagem">
-		</div>
-	</div>
-	
 	</form>
+	
+	<br/>
+	<br/>
+
+<form method="get" action="controllerImagem">	
+<div align="left" style="width: 100%;">
+	<table align="left" style="widows: 100%">
+		<c:forEach items='${listadeimagens}' var='imagem'>
+			<tr>
+				<td style="width: 70px;" align="left"><c:out value="${imagem.id}" /></td>
+				<td align="left"> <img border="0" width="100" height="100" alt="Imagem" src="<c:out value="${imagem.urlminiimg}" />"> </td>
+				<td align="left"><c:out value="${imagem.produto}" /></td>
+				<td align="left"><c:out value="${imagem.fornecedor}" /></td>
+				<td align="right"><a
+					href="controllerImagem?acao=editar&codigoImg=<c:out value="${imagem.id}"/>">Editar</a>
+				</td>
+				<td align="right"><a
+					href="controllerImagem?acao=deletar&codigoImg=<c:out value="${imagem.id}"/>">Excluir</a>
+				</td>
+			</tr>
+			<br />
+		</c:forEach>
+
+	</table>
+	
+</div>	
+</form>
 </body>
+
+<script type="text/javascript">
+	// transforma a imagem em base64 e mostra no navegador
+	function visualizarImg() {
+		var preview = document.querySelector('img'); /// pega o campo de imagem
+		var file = document.querySelector('input[type=file]').files[0]; // pega o primeiro input que armazena a imagem em base 64
+		var reader = new FileReader();
+
+		reader.onloadend = function() {
+			preview.src = reader.result;// carrega em base64 a img
+			document.getElementById("urlimagemBase64").value = reader.result; // seta o valor da imagem ao intputtext urlimagemBase64
+		};
+
+		if (file) {
+			reader.readAsDataURL(file); // faz o prewiew da imagem na tela	    
+		} else {
+			preview.src = "";
+		}
+
+	}
+
+	// deleta a imagem do navegador
+	function deletaFoto() {
+		var preview = document.querySelector('img');
+		preview.src = '';
+		document.getElementById("urlimagemBase64").value = '';
+		document.getElementById("target").src = '';
+
+	}
+</script>
 </html>
