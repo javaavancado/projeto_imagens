@@ -94,7 +94,7 @@ public class DaoImagens {
 	public List<Imagens> consultaTodos() {
 
 		List<Imagens> retornoList = new ArrayList<Imagens>();
-		String sql = "select id,produto,fornecedor, miniatura FROM imagens order by id;";
+		String sql = "select id,produto,fornecedor, miniatura, urlminiimg FROM imagens order by id;";
 
 		try {
 			PreparedStatement find = connection.prepareStatement(sql);
@@ -105,7 +105,7 @@ public class DaoImagens {
 				retorno.setProduto(resultSet.getString("produto"));
 				retorno.setFornecedor(resultSet.getString("fornecedor"));
 				retorno.setMiniatura(resultSet.getString("miniatura"));
-//				retorno.setUrlminiimg(resultSet.getString("urlminiimg"));
+ 				retorno.setUrlminiimg(resultSet.getString("urlminiimg"));
 
 				retornoList.add(retorno);
 			}

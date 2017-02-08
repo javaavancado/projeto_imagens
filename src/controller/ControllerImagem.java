@@ -1,13 +1,22 @@
 package controller;
 
+import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 
+import javax.imageio.ImageIO;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.xml.bind.DatatypeConverter;
+
+import org.apache.tomcat.util.codec.binary.Base64;
 
 import dao.DaoImagens;
 import entidade.Imagens;
@@ -75,9 +84,45 @@ public class ControllerImagem extends HttpServlet {
 				imagens.setProduto(produto);
 				imagens.setFornecedor(fornecedor);
 				imagens.setMiniatura(tamanhomini);
-				imagens.setUrlimagem(urlimagemBase64);
-				imagens.setUrlminiimg(urlimagemBase64);
-				// -----------------------------------------------------
+				imagens.setUrlimagem(urlimagemBase64);// seta a imagem original 
+				
+				//----------------------Criando miniatura------------------------------
+				String miniImgBase64 = null;
+				 if(urlimagemBase64 != null && !urlimagemBase64.isEmpty()){
+					// pega só a parte da imagem original em base64
+					String base64Image = urlimagemBase64.split(",")[1];
+				    
+					//Convertendo para  byte[] usando lib apache
+					byte[] imageBytes = new Base64().decodeBase64(base64Image);
+					
+					// Transformando em BufferedImage 
+					BufferedImage bufferedImage = ImageIO.read(new ByteArrayInputStream(imageBytes));
+					
+					// pega o tipo da imagem
+					int type = bufferedImage.getType() == 0? BufferedImage.TYPE_INT_ARGB : bufferedImage.getType();
+					
+					int largura = Integer.parseInt(tamanhomini.split("x")[0]);
+					int altura = Integer.parseInt(tamanhomini.split("x")[1]);
+					
+					BufferedImage resizedImage = new BufferedImage(largura, altura, type);
+					Graphics2D g = resizedImage.createGraphics();
+					g.drawImage(bufferedImage, 0, 0, largura, altura, null);
+					g.dispose();
+					
+					 // escrevendo novamente a imagem em tamanho menor
+					ByteArrayOutputStream baos = new ByteArrayOutputStream();
+				    ImageIO.write(resizedImage, "png", baos);
+				    
+				    
+				    // escreve um arquivo com a miniatura
+				    //ImageIO.write(resizedImage, "png", new File("c:\\miniatura.jpg")); 
+				    
+				    // monta novamente a base64 completa
+				    miniImgBase64 = "data:image/png;base64," + DatatypeConverter.printBase64Binary(baos.toByteArray());
+					//--------------------------------------Fim da criação da miniatura---------------------------------------------
+				 }
+			    
+			    imagens.setUrlminiimg(miniImgBase64);// seta a miniatura em base64
 
 				// ----------------salva no banco de dados----------------
 				daoImagens.salvarOuAtualizar(imagens);

@@ -44,9 +44,9 @@
 					<tr>
 						<td>
 						<select style="width: 200px;" id="fornecedor" name="fornecedor">
-								<option value="">Defina o fornecedor</option>
-								<option value="forn1">Fonecedor A</option>
-								<option value="fora2">Fornecedor B</option>
+								<option value="nao_informado">Defina o fornecedor</option>
+								<option value="Fonecedor A">Fonecedor A</option>
+								<option value="Fonecedor B">Fonecedor B</option>
 						</select></td>
 					</tr>
 					<tr>
@@ -54,7 +54,7 @@
 					</tr>
 					<tr>
 						<td><select style="width: 200px;" id="tamanhomini" name="tamanhomini">
-								<option value="">Defina o tamanho da miniatura</option>
+								<option value="50x50">Defina o tamanho da miniatura</option>
 								<option value="200x300">200 x 300</option>
 								<option value="300x420">300 x 420</option>
 						</select></td>
@@ -89,8 +89,8 @@
 			<tr>
 				<td style="width: 70px;" align="left"><c:out value="${imagem.id}" /></td>
 				<td align="left"> <img border="0" width="100" height="100" alt="Imagem" src="<c:out value="${imagem.urlminiimg}" />"> </td>
-				<td align="left"><c:out value="${imagem.produto}" /></td>
-				<td align="left"><c:out value="${imagem.fornecedor}" /></td>
+				<td style="width: 200px" align="left"><c:out value="${imagem.produto}" /></td>
+				<td style="width: 200px" align="left"><c:out value="${imagem.fornecedor}" /></td>
 				<td align="right"><a
 					href="controllerImagem?acao=editar&codigoImg=<c:out value="${imagem.id}"/>">Editar</a>
 				</td>
