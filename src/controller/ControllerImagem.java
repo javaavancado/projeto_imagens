@@ -67,7 +67,12 @@ public class ControllerImagem extends HttpServlet {
 			String acao = request.getParameter("acao");
 			String id = request.getParameter("id");
 
-			if (acao.equalsIgnoreCase("deletar")) {// se for deletar
+			if (acao.equalsIgnoreCase("todos")) {// mostrar todos
+				RequestDispatcher view = request.getRequestDispatcher("/index.jsp");
+				request.setAttribute("listadeimagens", daoImagens.consultaTodos());
+				view.forward(request, response);
+			} 
+			else if (acao.equalsIgnoreCase("deletar")) {// se for deletar
 				daoImagens.deleta(id);
 			} else {
 

@@ -65,6 +65,8 @@
 					value="Salvar"> 
 					<input type="submit"  onclick="document.getElementById('formImagem').action = 'controllerImagem?acao=deletar&id=${imagem.id}'"
 					value="Excluir">
+					<input type="submit"  onclick="document.getElementById('formImagem').action = 'controllerImagem?acao=todos'"
+					value="Todos">
 			</div>
 
 			<div style="float: right; width: 45%;">
