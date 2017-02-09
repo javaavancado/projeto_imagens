@@ -13,7 +13,9 @@
 		enctype="application/x-www-form-urlencoded" method="post">
 
 		<input type="hidden" name="urlimagemBase64" id="urlimagemBase64"
-			value="${imagem.urlimagem}" /> <input type="hidden"
+			value="${imagem.urlimagem}" /> 
+			
+			<input type="hidden"
 			name="urlminiimgBase64" id="urlminiimgBase64"
 			value="${imagem.urlminiimg}" />
 
@@ -27,7 +29,8 @@
 					<tr>
 						<td>
 						<input readonly="readonly" type="text" style="width: 80px;" id="id" name="id"
-							value="<c:out value="${imagem.id}" />"></td>
+							value="<c:out value="${imagem.id}" />">
+						</td>
 					</tr>
 
 					<tr>
@@ -36,7 +39,8 @@
 					<tr>
 						<td>
 						<input type="text" style="width: 200px;" id="produto"
-							name="produto" value="<c:out value="${imagem.produto}" />"></td>
+							name="produto" value="<c:out value="${imagem.produto}" />">
+						</td>
 					</tr>
 
 					<tr>
@@ -119,11 +123,19 @@
 				<td align="left"> <img border="0" width="100" height="100" alt="Imagem" src="<c:out value="${imagem.urlminiimg}" />"> </td>
 				<td style="width: 200px" align="left"><c:out value="${imagem.produto}" /></td>
 				<td style="width: 200px" align="left"><c:out value="${imagem.fornecedor}" /></td>
-				<td align="right"><a
+				<td align="right" style="width: 150px"><a
 					href="controllerImagem?acao=editar&codigoImg=<c:out value="${imagem.id}"/>">Editar</a>
 				</td>
-				<td align="right"><a
+				<td align="right" style="width: 150px"><a
 					href="controllerImagem?acao=deletar&codigoImg=<c:out value="${imagem.id}"/>">Excluir</a>
+				</td>
+				
+				<td align="right" style="width:150px"><a
+					href="imagemDownload?imagem=mini&codigoImg=<c:out value="${imagem.id}"/>">Miniatura</a>
+				</td>
+				
+				<td align="right" style="width: 150px"><a
+					href="imagemDownload?imagem=orig&codigoImg=<c:out value="${imagem.id}"/>">Original</a>
 				</td>
 			</tr>
 			<br />

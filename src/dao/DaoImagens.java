@@ -108,6 +108,36 @@ public class DaoImagens {
 		}
 		return retorno;
 	}
+	
+	public Imagens consultaMiniatura(Integer cod) {
+		Imagens retorno = new Imagens();
+		try {
+			String sql = "select urlminiimg FROM imagens where id = " + cod;
+			PreparedStatement find = connection.prepareStatement(sql);
+			ResultSet resultSet = find.executeQuery();
+			while (resultSet.next()) {
+				retorno.setUrlminiimg(resultSet.getString("urlminiimg"));
+			}
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+		return retorno;
+	}
+	
+	public Imagens consultaOriginal(Integer cod) {
+		Imagens retorno = new Imagens();
+		try {
+			String sql = "select urlimagem FROM imagens where id = " + cod;
+			PreparedStatement find = connection.prepareStatement(sql);
+			ResultSet resultSet = find.executeQuery();
+			while (resultSet.next()) {
+				retorno.setUrlimagem(resultSet.getString("urlimagem"));
+			}
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+		return retorno;
+	}
 
 	/**
 	 * Retorna uma lista com todos os registro de imagens do banco de dados
