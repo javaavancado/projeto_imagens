@@ -33,9 +33,9 @@ public class FilterConnection implements Filter {
 			FilterChain chain) throws IOException, ServletException {
 		try {
 			request.setCharacterEncoding("UTF-8");
-			connection = SingletonConnetion.getConnection();
-			chain.doFilter(request, response);
-			connection.commit();
+			connection = SingletonConnetion.getConnection(); // obtem a conexão
+			chain.doFilter(request, response);// executa a requisiçao
+			connection.commit();// faz commit
 			response.setCharacterEncoding("UTF-8");
 			response.setContentType("text/html; charset=UTF-8");
 
@@ -52,6 +52,7 @@ public class FilterConnection implements Filter {
 		}
 	}
 
+	// Inicia a conexão com o banco de dados quando o servidor inicia
 	@SuppressWarnings("static-access")
 	@Override
 	public void init(FilterConfig arg0) throws ServletException {

@@ -10,8 +10,10 @@ import java.sql.DriverManager;
  */
 public class SingletonConnetion {
 
+	//Conexão SQL Java
 	private static Connection connection = null;
 
+	// Método estático que faz sempre a chamada para conectar
 	static {
 		conectar();
 	}
@@ -20,6 +22,9 @@ public class SingletonConnetion {
 		conectar();
 	}
 
+	/**
+	 * Realiza a conexão com o banco de dados
+	 */
 	private static void conectar() {
 		try {
 			

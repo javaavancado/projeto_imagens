@@ -7,6 +7,7 @@ package entidade;
  */
 public class Imagens {
 
+	// Cada atributo faz referencia a uma coluna no banco de dados com o nome igual
 	private Integer id;
 	private String produto;
 	private String fornecedor;

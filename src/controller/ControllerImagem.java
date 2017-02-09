@@ -4,7 +4,6 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
@@ -22,7 +21,7 @@ import dao.DaoImagens;
 import entidade.Imagens;
 
 /**
- * Controller Servlet que irá controlar o cadastro das imagens
+ * Controller Servlet que irá controlar o cadastro das imagens no banco de dados
  * 
  * @author alex
  * 
@@ -31,25 +30,34 @@ import entidade.Imagens;
 public class ControllerImagem extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-	DaoImagens daoImagens = new DaoImagens();
+	// Dao que realizar as operações com o banco de dados
+	private DaoImagens daoImagens = new DaoImagens();
 
 	public ControllerImagem() {
 		super();
 	}
 
+	// Responsável por interceptar requisições por GET
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 
 		String acao = request.getParameter("acao");
 		String id = request.getParameter("codigoImg");
-		if (acao.equalsIgnoreCase("editar")) {// se estiver editando
-			Imagens imagensEditar = daoImagens.consulta(Integer.parseInt(id));
+		
+		if (acao.equalsIgnoreCase("editar")) {// se estiver editando o registro
+			
+			Imagens imagensEditar = daoImagens.consulta(Integer.parseInt(id));// consulta o registro
+			
+			// redireciona adicionando o registro a ser editado
 			RequestDispatcher view = request.getRequestDispatcher("/index.jsp");
 			request.setAttribute("imagem", imagensEditar);
 			view.forward(request, response);
+			
 		}else if (acao.equalsIgnoreCase("deletar")) {// se for deletar
 			try {
-				daoImagens.deleta(id);
+				daoImagens.deleta(id);// delete o registro
+				
+				// redireciona e faz a consulta de todos pra mostrar a lista atualizada
 				RequestDispatcher view = request.getRequestDispatcher("/index.jsp");
 				request.setAttribute("listadeimagens", daoImagens.consultaTodos());
 				view.forward(request, response);
@@ -59,6 +67,7 @@ public class ControllerImagem extends HttpServlet {
 		}
 	}
 
+	// Responsável por interceptar requisições por POST
 	protected void doPost(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 
@@ -67,21 +76,16 @@ public class ControllerImagem extends HttpServlet {
 			String acao = request.getParameter("acao");
 			String id = request.getParameter("id");
 
-			if (acao.equalsIgnoreCase("todos")) {// mostrar todos
-				RequestDispatcher view = request.getRequestDispatcher("/index.jsp");
-				request.setAttribute("listadeimagens", daoImagens.consultaTodos());
-				view.forward(request, response);
-			} 
-			else if (acao.equalsIgnoreCase("deletar")) {// se for deletar
-				daoImagens.deleta(id);
-			} else {
+			if (acao.equalsIgnoreCase("deletar")) {// se for deletar
+				daoImagens.deleta(id);// delete o registro
+				
+			} else if (acao.equalsIgnoreCase("salvar")) {// se for salvar e/ou atualizar
 
+				// ---------------------------Pega os parametros da requisição----------------------------
 				String produto = request.getParameter("produto");
 				String fornecedor = request.getParameter("fornecedor");
-				String urlimagemBase64 = request
-						.getParameter("urlimagemBase64");
+				String urlimagemBase64 = request.getParameter("urlimagemBase64");
 				String tamanhomini = request.getParameter("tamanhomini");
-				// -------------------------------------------------------
 
 				// --------------Seta os parametros para o objeto
 				Imagens imagens = new Imagens();
@@ -94,7 +98,7 @@ public class ControllerImagem extends HttpServlet {
 				//----------------------Criando miniatura------------------------------
 				String miniImgBase64 = null;
 				 if(urlimagemBase64 != null && !urlimagemBase64.isEmpty()){
-					// pega só a parte da imagem original em base64
+					//Pega só a parte da imagem original em base64
 					String base64Image = urlimagemBase64.split(",")[1];
 				    
 					//Convertendo para  byte[] usando lib apache
@@ -103,18 +107,20 @@ public class ControllerImagem extends HttpServlet {
 					// Transformando em BufferedImage 
 					BufferedImage bufferedImage = ImageIO.read(new ByteArrayInputStream(imageBytes));
 					
-					// pega o tipo da imagem
+					//Pega o tipo da imagem
 					int type = bufferedImage.getType() == 0? BufferedImage.TYPE_INT_ARGB : bufferedImage.getType();
 					
+					//Pegar a largura e a altura
 					int largura = Integer.parseInt(tamanhomini.split("x")[0]);
 					int altura = Integer.parseInt(tamanhomini.split("x")[1]);
 					
+					//Cria a imagem em minitura
 					BufferedImage resizedImage = new BufferedImage(largura, altura, type);
 					Graphics2D g = resizedImage.createGraphics();
 					g.drawImage(bufferedImage, 0, 0, largura, altura, null);
 					g.dispose();
 					
-					 // escrevendo novamente a imagem em tamanho menor
+					 //Escrevendo novamente a imagem em tamanho menor
 					ByteArrayOutputStream baos = new ByteArrayOutputStream();
 				    ImageIO.write(resizedImage, "png", baos);
 				    
@@ -122,14 +128,14 @@ public class ControllerImagem extends HttpServlet {
 				    // escreve um arquivo com a miniatura
 				    //ImageIO.write(resizedImage, "png", new File("c:\\miniatura.jpg")); 
 				    
-				    // monta novamente a base64 completa
+				    //Monta novamente a base64 completa da miniatura
 				    miniImgBase64 = "data:image/png;base64," + DatatypeConverter.printBase64Binary(baos.toByteArray());
 					//--------------------------------------Fim da criação da miniatura---------------------------------------------
 				 }
 			    
-			    imagens.setUrlminiimg(miniImgBase64);// seta a miniatura em base64
+			    imagens.setUrlminiimg(miniImgBase64);// seta a miniatura em base64 para o objeto
 
-				// ----------------salva no banco de dados----------------
+				// ----------------salva no banco de dados o registro de imagem----------------
 				daoImagens.salvarOuAtualizar(imagens);
 
 			}

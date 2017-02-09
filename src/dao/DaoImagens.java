@@ -21,10 +21,14 @@ public class DaoImagens {
 	private Connection connection;
 
 	public DaoImagens() {
-
-		connection = SingletonConnetion.getConnection();
+		connection = SingletonConnetion.getConnection(); //Obtem a conexão com o banco de dados
 	}
 
+	/**
+	 * Grava ou atualiza o registro no banco de dados
+	 * @param imagen
+	 * @throws Exception
+	 */
 	public void salvarOuAtualizar(Imagens imagen) throws Exception {
 		try {
 			if (imagen.getId() == null || imagen.getId() <= 0) {// insere
@@ -42,6 +46,11 @@ public class DaoImagens {
 		}
 	}
 
+	/**
+	 * Atualiza o objeto no banco de dados
+	 * @param imagem
+	 * @throws Exception
+	 */
 	private void atualiza(Imagens imagem) throws Exception {
 		String sql = "UPDATE imagens SET produto=?, fornecedor=?, miniatura=?, urlimagem=?, urlminiimg=?  where id = "
 				+ imagem.getId();
@@ -52,11 +61,15 @@ public class DaoImagens {
 		connection.commit();
 	}
 
+	/**
+	 * Delete o registro no banco de dados
+	 * @param codImg
+	 * @throws Exception
+	 */
 	public void deleta(String codImg) throws Exception {
 		if (!codImg.isEmpty() && codImg != null) {
 			String sql = "DELETE FROM imagens where id = " + codImg;
 			try {
-
 				PreparedStatement delete = connection.prepareStatement(sql);
 				delete.execute();
 				connection.commit();
@@ -71,6 +84,11 @@ public class DaoImagens {
 		}
 	}
 
+	/**
+	 * Retorna o registro consultado pelo código passado por parametro
+	 * @param cod
+	 * @return Imagens
+	 */
 	public Imagens consulta(Integer cod) {
 		Imagens retorno = new Imagens();
 		try {
@@ -91,6 +109,10 @@ public class DaoImagens {
 		return retorno;
 	}
 
+	/**
+	 * Retorna uma lista com todos os registro de imagens do banco de dados
+	 * @return List<Imagens>
+	 */
 	public List<Imagens> consultaTodos() {
 
 		List<Imagens> retornoList = new ArrayList<Imagens>();
@@ -115,6 +137,12 @@ public class DaoImagens {
 		return retornoList;
 	}
 
+	/**
+	 * Constroi a instrução para o banco de dados
+	 * @param imagen
+	 * @param insert
+	 * @throws Exception
+	 */
 	private void constroiStatement(Imagens imagen, PreparedStatement insert)
 			throws Exception {
 		insert.setString(1, imagen.getProduto());
