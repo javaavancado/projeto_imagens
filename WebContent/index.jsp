@@ -60,7 +60,7 @@
 						</select></td>
 					</tr>
 				</table>
-				<br /> <br /> <br /> <br /> <br /> 
+				<br /> <br /> <br /> <br />
 				    <input type="submit" onclick="document.getElementById('formImagem').action = 'controllerImagem?acao=salvar'"
 					value="Salvar"> 
 					<input type="submit"  onclick="document.getElementById('formImagem').action = 'controllerImagem?acao=deletar&id=${imagem.id}'"
