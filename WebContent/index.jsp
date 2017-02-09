@@ -1,3 +1,4 @@
+<%@page import="entidade.Imagens"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
@@ -45,8 +46,21 @@
 						<td>
 						<select style="width: 200px;" id="fornecedor" name="fornecedor">
 								<option value="nao_informado">Defina o fornecedor</option>
-								<option value="Fonecedor A">Fonecedor A</option>
-								<option value="Fonecedor B">Fonecedor B</option>
+								<option value="Fonecedor A"
+								
+								<% 
+									Imagens imagem = (Imagens) request.getAttribute("imagem");
+									if (imagem != null && imagem.getFornecedor().equalsIgnoreCase("Fonecedor A")) {
+										 out.print("selected=\"selected\"");
+									} 
+								%>>Fonecedor A</option>
+								
+								<option value="Fonecedor B"
+								<% 
+									if (imagem != null && imagem.getFornecedor().equalsIgnoreCase("Fonecedor B")) {
+										 out.print("selected=\"selected\"");
+									} 
+								%>>Fonecedor B</option>
 						</select></td>
 					</tr>
 					<tr>
@@ -54,9 +68,21 @@
 					</tr>
 					<tr>
 						<td><select style="width: 200px;" id="tamanhomini" name="tamanhomini">
-								<option value="50x50">Defina o tamanho da miniatura</option>
-								<option value="200x300">200 x 300</option>
-								<option value="300x420">300 x 420</option>
+								<option value="50x50">Defina o tamanho da miniatura</option> 
+								
+								<option value="200x300"
+								<% 
+									if (imagem != null && imagem.getMiniatura().equalsIgnoreCase("200x300")) {
+										 out.print("selected=\"selected\"");
+									} 
+								%> >200 x 300</option>
+								
+								<option value="300x420"
+								<% 
+									if (imagem != null && imagem.getMiniatura().equalsIgnoreCase("300x420")) {
+										 out.print("selected=\"selected\"");
+									} 
+								%>>300 x 420</option>
 						</select></td>
 					</tr>
 				</table>
